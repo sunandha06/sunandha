@@ -1,98 +1,42 @@
-Python 3.13.3 (tags/v3.13.3:6280bb5, Apr  8 2025, 14:47:33) [MSC v.1943 64 bit (AMD64)] on win32
-Enter "help" below or click "Help" above for more information.
+import speech_recognition as sr
+import csv
 
-= RESTART: C:/Users/ssuna/AppData/Local/Programs/Python/Python313/data entry.py
-Welcome to the Speech Data Entry System!
+def recognize_speech():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Please speak now...")
+        r.adjust_for_ambient_noise(source)
+        audio = r.listen(source)
+    try:
+        text = r.recognize_google(audio)
+        print(f"Recognized: {text}")
+        return text
+    except sr.UnknownValueError:
+        print("Sorry, could not understand your speech.")
+        return None
+    except sr.RequestError as e:
+        print(f"Could not request results; {e}")
+        return None
 
-Enter a new record (say 'stop' to end):
-Please speak now...
-Recognized: enter the data
-Entry saved.
+def save_to_csv(data, filename="data_entries.csv"):
+    with open(filename, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(data)
 
-Enter a new record (say 'stop' to end):
-Please speak now...
-Recognized: 1 2 3 4 5 6 7 8 9 10 11 123 stop
-Entry saved.
+def main():
+    print("Welcome to the Speech Data Entry System!")
+    while True:
+        print("\nEnter a new record (say 'stop' to end):")
+        entry = recognize_speech()
+        if entry:
+            if entry.lower() == 'stop':
+                break
+            save_to_csv([entry])
+            print("Entry saved.")
+        else:
+            print("No data recorded.")
 
-Enter a new record (say 'stop' to end):
-Please speak now...
-Recognized: 10 15 18 12 13
-Entry saved.
+    print("Exiting system.")
 
-Enter a new record (say 'stop' to end):
-Please speak now...
-Recognized: success
-Entry saved.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Recognized: Radha Sharma
-Entry saved.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
-Sorry, could not understand your speech.
-No data recorded.
-
-Enter a new record (say 'stop' to end):
-Please speak now...
+if _name_ == "_main_":
+    main()
